@@ -11,8 +11,6 @@ import { getTrendingTopics } from '../TrendingWords';
 interface props {
   message: string;
   author: string;
-  pictureMessage: string;
-  communityId: string | null;
   path: string;
 }
 export const postThread = async ({ message, author, path }: props) => {

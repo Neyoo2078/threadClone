@@ -53,7 +53,6 @@ const CreateThread = ({ userDatas }: props) => {
       message: values?.message,
       author: values?.accountid,
       path: pathname,
-      communityId: null,
     });
 
     router.push('/');
