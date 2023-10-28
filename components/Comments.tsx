@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import ThreadCard from './ThreadCard';
 
-const Comments = ({ posts }: { posts: [] }) => {
+const Comments = ({ posts, user }: { posts: []; user: any }) => {
   const isComment = posts.length > 0;
   return (
     <div
@@ -11,7 +11,13 @@ const Comments = ({ posts }: { posts: [] }) => {
       }`}
     >
       {posts.map((post, i) => (
-        <ThreadCard key={i} post={post} />
+        <ThreadCard
+          key={i}
+          post={post}
+          thread={false}
+          userid={user._id}
+          user={user}
+        />
       ))}
     </div>
   );

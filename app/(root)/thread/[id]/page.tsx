@@ -21,7 +21,7 @@ const page = async ({ params }: { params: { id: string } }) => {
           CurrentUserId={userinfos._id}
         />
       </div>
-      <Comments posts={post.children} />
+      <Comments posts={post.children} user={userinfos} />
     </div>
   );
 };
