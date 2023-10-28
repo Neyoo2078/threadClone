@@ -37,7 +37,7 @@ type Event = {
 
 export const POST = async (request: Request) => {
   console.log('webhook');
-  const payload = await request.text();
+  const payload = await request.json();
   const header = headers();
 
   const heads = {
@@ -58,7 +58,7 @@ export const POST = async (request: Request) => {
       heads as IncomingHttpHeaders & WebhookRequiredHeaders
     ) as Event;
   } catch (err) {
-    return NextResponse.json({ message: err }, { status: 400 });
+    return NextResponse.json({ messag: err }, { status: 400 });
   }
 
   const eventType: EventType = evnt?.type!;
