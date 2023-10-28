@@ -13,7 +13,7 @@ const page = async ({ params }: { params: { id: string } }) => {
   console.log({ threadPost: post });
   return (
     <div className="flex flex-col gap-3 w-full">
-      <ThreadCard thread post={post} />
+      <ThreadCard thread post={post} userid={userinfos._id} user={user} />
       <div className="mt-7 w-full">
         <Comment
           Threadid={post._id}
