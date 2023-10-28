@@ -10,7 +10,7 @@ import { connectionDb } from '../DataBase';
 export async function createCommunity(
   id: string,
   name: string,
-  username: string,
+  username: any,
   image: string,
   bio: string,
   createdById: string // Change the parameter name to reflect it's an id
