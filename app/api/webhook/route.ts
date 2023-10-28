@@ -37,7 +37,7 @@ type Event = {
 
 export const POST = async (request: Request) => {
   console.log('webhook');
-  const payload = await request.text();
+  const payload = await request.json();
   const header = headers();
 
   const heads = {
