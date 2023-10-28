@@ -5,11 +5,7 @@ import { currentUser } from '@clerk/nextjs';
 import { fetchUser } from '@/lib/Actions/User';
 import LatestTab from '@/components/LatestTab';
 import PeopleTab from '@/components/PeopleTab';
-const page = async ({
-  searchParams,
-}: {
-  [key: string]: string | string[] | undefined | any;
-}) => {
+const page = async ({ searchParams }: any) => {
   const user = await currentUser();
   const Duser = await fetchUser({ userid: user?.id });
   const users = JSON.parse(Duser);
