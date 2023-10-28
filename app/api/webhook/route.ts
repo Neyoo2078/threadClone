@@ -35,7 +35,7 @@ type Event = {
   type: EventType;
 };
 
-export const POST = async (request: Request) => {
+async function handler(request: Request) {
   console.log('webhook');
   const payload = await request.json();
   const header = headers();
@@ -207,4 +207,7 @@ export const POST = async (request: Request) => {
       );
     }
   }
-};
+}
+export const GET = handler;
+export const POST = handler;
+export const PUT = handler;
