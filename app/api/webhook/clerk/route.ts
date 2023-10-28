@@ -36,6 +36,7 @@ type Event = {
 };
 
 export const POST = async (request: Request) => {
+  console.log(await request.json());
   const payload = await request.json();
   const header = headers();
 
