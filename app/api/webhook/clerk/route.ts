@@ -206,3 +206,7 @@ export const POST = async (request: Request) => {
     }
   }
 };
+
+export const GET = async (request: Request, res: Response) => {
+  return Response.json({ message: 'hello world ' });
+};
