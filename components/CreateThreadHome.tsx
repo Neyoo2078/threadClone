@@ -152,8 +152,7 @@ const CreateThreadHome = ({ userDatas }: props) => {
                       <Input
                         placeholder="What is happening?!"
                         className="account-form_input no-focus outline-none"
-                        onChange={handleChange}
-                        value={inputValue}
+                        {...field}
                       />
                     </FormControl>
                     <FormMessage />
