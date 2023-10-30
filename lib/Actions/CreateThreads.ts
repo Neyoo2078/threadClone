@@ -12,8 +12,14 @@ interface props {
   message: string;
   author: string;
   path: string;
+  communityId: any;
 }
-export const postThread = async ({ message, author, path }: props) => {
+export const postThread = async ({
+  message,
+  author,
+  path,
+  communityId,
+}: props) => {
   try {
     await connectionDb();
 

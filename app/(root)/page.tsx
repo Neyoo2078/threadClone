@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { fetchTreads } from '@/lib/Actions/CreateThreads';
 import ThreadCard from '@/components/ThreadCard';
 import { currentUser } from '@clerk/nextjs';
+import { useOrganization } from '@clerk/nextjs';
 import CreateThreadHome from '@/components/CreateThreadHome';
 import { fetchUser } from '@/lib/Actions/User';
 

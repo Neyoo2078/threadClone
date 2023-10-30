@@ -21,6 +21,7 @@ import { AiOutlineClose, AiOutlineSearch } from 'react-icons/ai';
 import EmojiPickers2 from './EmojiPicker2';
 import { isBase64Image } from '@/lib/utils';
 import { useUploadThing } from '@/lib/uploadthing';
+import { useOrganization } from '@clerk/nextjs';
 
 import {
   Form,
@@ -56,6 +57,9 @@ const CreateThreadHome = ({ userDatas }: props) => {
   const [closeModal, setcloseModal] = useState(false);
   const [inputValue, setinputValue] = useState('');
 
+  const userOrganization = useOrganization();
+  console.log({ userOrganization });
+
   const form = useForm({
     resolver: zodResolver(ThreadValidation),
     defaultValues: {
@@ -80,7 +84,7 @@ const CreateThreadHome = ({ userDatas }: props) => {
     await postThread({
       message: values?.message,
       author: values?.accountid,
-      pictureMessage: pictureUrl,
+      // pictureMessage: pictureUrl,
       path: pathname,
       communityId: null,
     });
@@ -130,7 +134,7 @@ const CreateThreadHome = ({ userDatas }: props) => {
       )}
       <div className="flex gap-1  items-start justify-between">
         <Image
-          src={userDatas.image}
+          src={userDatas?.image}
           alt="profile_photo"
           width={96}
           height={96}
