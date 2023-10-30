@@ -6,6 +6,7 @@ import { currentUser } from '@clerk/nextjs';
 import { useOrganization } from '@clerk/nextjs';
 import CreateThreadHome from '@/components/CreateThreadHome';
 import { fetchUser } from '@/lib/Actions/User';
+import { redirect } from 'next/navigation';
 
 export default async function Home() {
   const thre = await fetchTreads();
@@ -17,6 +18,9 @@ export default async function Home() {
 
   const userinfo: any = await fetchUser({ userid: userDatas?.id });
   const user = JSON.parse(userinfo);
+  if (!user) {
+    redirect('/onboarding');
+  }
 
   return (
     <main className="text-white">
