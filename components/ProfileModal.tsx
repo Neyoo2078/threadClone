@@ -28,7 +28,7 @@ import { isBase64Image } from '@/lib/utils';
 import { currentUser } from '@clerk/nextjs';
 import UserUpdate from '../lib/Actions/User';
 
-const ProfileModal = ({ setopenModal, profile }: any) => {
+const ProfileModal = ({ setopenModal, users: profile, use }: any) => {
   const [GrabPhoto, setGrabPhoto] = useState(false);
   const [GrabProfilePhoto, setGrabProfilePhoto] = useState(false);
   const [image, setimage] = useState('/assets/bg_profile.jpg');
@@ -127,15 +127,15 @@ const ProfileModal = ({ setopenModal, profile }: any) => {
     }
 
     await updateUserData({
-      userid: user.id,
+      userid: use.id,
       name: values.name,
       username: values.username,
       bio: values.bio,
       image: profilepictureUrl,
       banner: image,
+      pathname,
     });
-
-    router.push('/');
+    setopenModal(false);
   };
 
   return (

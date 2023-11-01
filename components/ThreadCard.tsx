@@ -158,8 +158,11 @@ const ThreadCard = ({ post, thread, userid, user }: props) => {
             }}
             className="flex flex-col items-center"
           >
-            <Link
-              href={`/profile/${post?.author?._id}`}
+            <div
+              onClick={(e) => {
+                e.stopPropagation();
+                router.push(`/profile?user=${post?.author?._id}`);
+              }}
               className="relative h-11 w-11"
             >
               <Image
@@ -168,13 +171,16 @@ const ThreadCard = ({ post, thread, userid, user }: props) => {
                 fill
                 className="cursor-pointer rounded-full"
               />
-            </Link>
+            </div>
             <div className="thread-card_bar" />
           </div>
           <div className="flex w-full flex-col">
-            <Link
+            <div
               className="flex cursor-ponter justify-start items-center  gap-2"
-              href={`/profile/${post?.author?._id}`}
+              onClick={(e) => {
+                e.stopPropagation();
+                router.push(`/profile?user=${post?.author?._id}`);
+              }}
             >
               <h4 className="text-base-semibold text-light-1">
                 {post?.author?.name}
@@ -183,7 +189,7 @@ const ThreadCard = ({ post, thread, userid, user }: props) => {
                 @{post.author.username}
               </h4>
               <h4 className=" text-[11px]  text-light-1">. {D}</h4>
-            </Link>
+            </div>
             <p className="mt-2 text-small-regular text-light-2">
               {post.message}
             </p>

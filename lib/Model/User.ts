@@ -11,6 +11,8 @@ const UserSchema = new Schema({
   threads: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Threads' }],
   onboarded: { type: Boolean, default: false },
   communities: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Community' }],
+  followers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+  following: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
 });
 
 const Users = models?.User || model('User', UserSchema);

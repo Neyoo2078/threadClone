@@ -3,6 +3,10 @@ import { throws } from 'assert';
 import { connectionDb } from '../DataBase';
 import Users from '../Model/User';
 import Threads from '../Model/Thread';
+import { revalidatePath } from 'next/cache';
+import mongoose from 'mongoose';
+
+const { ObjectId } = mongoose.Types;
 
 interface props {
   userid: String;
@@ -11,6 +15,7 @@ interface props {
   bio: String;
   image: String;
   onboarded: Boolean;
+  pathname: string;
 }
 export default async function ({
   userid,
@@ -19,6 +24,7 @@ export default async function ({
   bio,
   image,
   onboarded,
+  pathname,
 }: props) {
   try {
     await connectionDb();
@@ -33,6 +39,7 @@ export default async function ({
         { userid, name, username, bio, image, onboarded },
         { new: true }
       );
+      revalidatePath(pathname);
       console.log('update completed');
     }
   } catch (error: any) {
@@ -71,6 +78,32 @@ export async function updateUserData({
 export const fetchUser = async ({ userid }: { userid: any }) => {
   await connectionDb();
   const user = await Users.findOne({ userid }).populate({
+    path: 'threads',
+    model: 'Threads',
+    populate: [
+      {
+        path: 'author',
+        model: 'User',
+        select: ' _id name parentId image',
+      },
+      {
+        path: 'children',
+        populate: {
+          path: 'author',
+          model: 'User',
+          select: ' _id name parentId image',
+        },
+        model: 'Threads',
+      },
+    ],
+  });
+
+  return JSON.stringify(user);
+};
+
+export const fetchUserBySearch = async ({ userid }: { userid: any }) => {
+  await connectionDb();
+  const user = await Users.findById(userid).populate({
     path: 'threads',
     model: 'Threads',
     populate: [
@@ -158,6 +191,98 @@ export const getValueUsers = async (value: string) => {
     );
     console.log({ res2 });
     return JSON.stringify({ res, res2 });
+  } catch (error: any) {
+    throw new Error(error);
+  }
+};
+
+export const AddFriend = async ({ activeuser, seconduser, path }: any) => {
+  try {
+    connectionDb();
+    // const res = await Users.findByIdAndUpdate(
+    //   seconduser,
+    //   {
+    //     $push: { followers: activeuser },
+    //   },
+    //   { new: true }
+    // );
+    const res = await Users.findById(seconduser);
+    const activerres = await Users.findById(activeuser);
+    console.log(res.followers);
+    console.log('follower added');
+
+    const exist = res.followers.includes(activeuser);
+    console.log(exist);
+    console.log({ _id: res._id });
+    console.log(res.followers);
+    if (!exist) {
+      // const secondfollow = res.followers.push(activerres._id);
+      // const activefollow = activerres.following.push(res._id);
+      // console.log({ secondfollow });
+
+      await Users.findByIdAndUpdate(seconduser, {
+        $push: { followers: activerres._id },
+      });
+      await Users.findByIdAndUpdate(activeuser, {
+        $push: { following: res._id },
+      });
+    } else {
+      const secondfollow = res.followers.filter(
+        (items: any) => items.toString() !== activeuser
+      );
+      const activefollow = activerres.following.filter(
+        (items: any) => items.toString() !== seconduser
+      );
+      await Users.findByIdAndUpdate(seconduser, { followers: secondfollow });
+      await Users.findByIdAndUpdate(activeuser, { following: activefollow });
+    }
+    revalidatePath(path);
+  } catch (error: any) {
+    throw new Error(error);
+  }
+};
+
+export const getsuggestedUsers = async (userid: string) => {
+  try {
+    connectionDb();
+    const res = await Users.findById(userid).populate({
+      path: 'followers',
+      model: 'User',
+      populate: { path: 'followers', model: 'User' },
+    });
+    let followersArray: Array<any> = [];
+    res.followers.forEach((items: any) => {
+      console.log({ i: items.followers });
+      followersArray = [...followersArray, ...items.followers];
+    });
+    const filterOutCommonUsers = followersArray.filter(
+      (item) => {
+        const exist = res.followers.find(
+          (items: any) => items._id.toString() === item._id.toString()
+        );
+
+        if (!exist) {
+          return item;
+        }
+      }
+      // res.followers.includes(item._id)
+    );
+
+    return JSON.stringify(filterOutCommonUsers);
+  } catch (error: any) {
+    throw new Error(error);
+  }
+};
+
+export const allUsers = async () => {
+  try {
+    connectionDb();
+    const res = await Users.find({}).populate({
+      path: 'followers',
+      model: 'User',
+      populate: { path: 'followers', model: 'User' },
+    });
+    return JSON.stringify(res);
   } catch (error: any) {
     throw new Error(error);
   }

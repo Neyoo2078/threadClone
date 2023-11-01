@@ -88,8 +88,8 @@ const CreateThreadHome = ({ userDatas }: props) => {
       path: pathname,
       communityId: null,
     });
+    form.reset();
   };
-
   useEffect(() => {
     if (openImageMessage) {
       const data = document.getElementById('photo-picker') as HTMLInputElement;
