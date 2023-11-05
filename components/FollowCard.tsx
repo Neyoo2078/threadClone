@@ -20,25 +20,28 @@ const FollowCard = ({ user, users, suggest }: any) => {
   return (
     <div>
       {' '}
-      <div className="flex items-start gap-11">
-        <div className="w-[140px] h-[60px]  2xl:w-[65px] 2xl:h-[60px] rounded-full">
-          <img
-            src={user.image}
-            alt="photo"
-            className="w-full h-full   rounded-full"
-          />
-        </div>
-        <div className="flex flex-col gap-3">
-          <div
-            onClick={() => {
-              router.push(`/profile?user=${user._id}`);
-            }}
-            className={` ${suggest && 'text-[#fff]'} cursor-pointer`}
-          >
-            <h1 className="font-semibold">{user.name}</h1>
-            <h1 className="text-[15px]">@{user.username}</h1>
+      <div className="flex items-start justify-between">
+        <div className="flex gap-2">
+          {' '}
+          <div className="w-[140px] h-[60px]  2xl:w-[65px] 2xl:h-[60px] rounded-full">
+            <img
+              src={user.image}
+              alt="photo"
+              className="w-full h-full   rounded-full"
+            />
           </div>
-          {!suggest && <h1 className="text-[15px]">{user.bio}</h1>}
+          <div className="flex flex-col gap-3">
+            <div
+              onClick={() => {
+                router.push(`/profile?user=${user._id}`);
+              }}
+              className={` ${suggest && 'text-[#fff]'} cursor-pointer`}
+            >
+              <h1 className="font-semibold">{user.name}</h1>
+              <h1 className="text-[15px]">@{user.username}</h1>
+            </div>
+            {!suggest && <h1 className="text-[15px]">{user.bio}</h1>}
+          </div>
         </div>
         {users?._id !== user._id.toString() && (
           <div className="p-2 text-[15px] hover:bg-transparent hover:border-[1px] border-[white] rounded-[25px] bg-[#2fb4be] ">

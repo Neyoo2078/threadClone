@@ -199,7 +199,7 @@ const CreateThreadHome = ({ userDatas, communityIds, setReload }: props) => {
                 onClick={() => {
                   setopenEmoji(true);
                 }}
-                className="rounded-full p-2 hover:bg-primary-500 "
+                className="rounded-full hidden lg:block p-2 hover:bg-primary-500 "
               >
                 <BsEmojiSmile className="w-[20px] h-[20px]  cursor-pointer" />
               </div>

@@ -37,12 +37,14 @@ const SuggestedUsers = ({ userid, user }: any) => {
   return (
     <div className="bg-[#3c3b3b7c] p-3 rounded-md">
       <h1 className="text-[20px] mb-5 font-bold text-white">Who to follow</h1>
-      {AllFollow.slice(0, 3).map((items, i) => (
-        <FollowCard user={items} suggest users={user} key={i} />
-      ))}
-      {AllFollow.length > 3 && (
-        <h1 className="text-[#5a9af3] italic">show more</h1>
-      )}
+      <div className="flex flex-col gap-2">
+        {AllFollow.slice(0, 3).map((items, i) => (
+          <FollowCard user={items} suggest users={user} key={i} />
+        ))}
+        {AllFollow.length > 3 && (
+          <h1 className="text-[#5a9af3] italic">show more</h1>
+        )}
+      </div>
     </div>
   );
 };

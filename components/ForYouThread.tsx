@@ -12,7 +12,7 @@ const forYouThread = ({ threads, user }: any) => {
   });
   const [TabThread, setTabThread] = useState<any>([]);
   const [Reload, setReload] = useState(false);
-
+  console.log({ Homeuser: user });
   const fetchCommunity = async () => {
     if (ActiveTab.id) {
       const res = await fetchCommunityDetails(ActiveTab.id);

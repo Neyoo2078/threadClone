@@ -27,7 +27,7 @@ export const postThread = async ({
     const thread = await Threads.create({
       message,
       author,
-      community: communityId ? communityId : '',
+      community: communityId ? communityId : null,
     });
     if (communityId) {
       await Community.findByIdAndUpdate(communityId, {
