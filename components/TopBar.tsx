@@ -42,19 +42,19 @@ const TopBar = () => {
               }}
               className="text-white hover:font-semibold bg-primary-500 hover:bg-primary-500/70 p-2 rounded-lg"
             >
-              Sign In
+              Sign Ins
             </button>
           </SignedOut>
         </div>
-        <OrganizationSwitcher
+        {/* <OrganizationSwitcher
           appearance={{
             baseTheme: dark,
             elements: {
               organizationSwitcherTrigger: 'py-2 px-4',
             },
           }}
-        />
-        {/* <UserButton afterSignOutUrl="/" /> */}
+        /> */}
+        <UserButton afterSignOutUrl="/" />
       </div>
     </div>
   );

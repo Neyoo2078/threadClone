@@ -3,12 +3,9 @@ import mongoose from 'mongoose';
 const communitySchema = new mongoose.Schema({
   id: {
     type: String,
-    required: true,
   },
   username: {
     type: String,
-    unique: true,
-    required: true,
   },
   name: {
     type: String,
@@ -23,7 +20,7 @@ const communitySchema = new mongoose.Schema({
   threads: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Thread',
+      ref: 'Threads',
     },
   ],
   members: [

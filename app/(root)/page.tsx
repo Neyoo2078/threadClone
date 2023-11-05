@@ -7,6 +7,7 @@ import { useOrganization } from '@clerk/nextjs';
 import CreateThreadHome from '@/components/CreateThreadHome';
 import { fetchUser } from '@/lib/Actions/User';
 import { redirect } from 'next/navigation';
+import ForYouThread from '@/components/ForYouThread';
 
 export default async function Home() {
   const thre = await fetchTreads();
@@ -24,24 +25,7 @@ export default async function Home() {
 
   return (
     <main className="text-white">
-      <h1 className="text-[40px] font-semibold">Home</h1>
-      <hr className="my-[10px]" />
-      <CreateThreadHome userDatas={user} />
-      <hr className="my-[10px]" />
-      {threads?.post.length === 0 ? (
-        <h1>no Thread avaialable</h1>
-      ) : (
-        <div className="flex flex-col gap-1 items-start">
-          {threads?.post.map((items: any) => (
-            <ThreadCard
-              post={items}
-              userid={user?._id}
-              thread={false}
-              user={user}
-            />
-          ))}
-        </div>
-      )}
+      <ForYouThread threads={threads} user={user} />
     </main>
   );
 }

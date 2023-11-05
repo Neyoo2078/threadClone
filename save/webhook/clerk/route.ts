@@ -56,7 +56,7 @@ export const POST = async (request: Request) => {
       heads as IncomingHttpHeaders & WebhookRequiredHeaders
     ) as Event;
   } catch (err) {
-    return NextResponse.json({ message: 'error occu' }, { status: 400 });
+    return NextResponse.json({ message: 'error occured' }, { status: 400 });
   }
 
   const eventType: EventType = evnt?.type!;
@@ -70,15 +70,15 @@ export const POST = async (request: Request) => {
 
     try {
       // @ts-ignore
-      await createCommunity(
-        // @ts-ignore
-        id,
-        name,
-        slug,
-        logo_url || image_url,
-        'org bio',
-        created_by
-      );
+      // await createCommunity(
+      //   // @ts-ignore
+      //   id,
+      //   name,
+      //   slug,
+      //   logo_url || image_url,
+      //   'org bio',
+      //   created_by
+      // );
 
       return NextResponse.json({ message: 'User created' }, { status: 201 });
     } catch (err) {

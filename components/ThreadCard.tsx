@@ -26,6 +26,7 @@ import EmojiPickers from './EmojiPickers';
 import { useUploadThing } from '@/lib/uploadthing';
 import { isBase64Image } from '@/lib/utils';
 import { ThreadComment } from '@/lib/Actions/CreateThreads';
+import { BsPeopleFill } from 'react-icons/bs';
 
 interface props {
   post: {
@@ -36,6 +37,7 @@ interface props {
     children: Array<[]>;
     comment: string;
     message: string;
+    community: { _id: string; name: string };
   };
   thread: any;
   userid: any;
@@ -149,7 +151,13 @@ const ThreadCard = ({ post, thread, userid, user }: props) => {
         router.push(`/thread/${post._id}`);
       }}
     >
-      <div className="flex items-start justify-between">
+      <div className="flex flex-col gap-2 items-start justify-between">
+        {post?.community?._id && (
+          <div className="flex gap-2 items-center">
+            <BsPeopleFill />
+            <h1 className="text-[12px]">{post.community.name}</h1>
+          </div>
+        )}
         <div className=" flex w-full flex-1 flex-row gap-4">
           <div
             onClick={(e) => {

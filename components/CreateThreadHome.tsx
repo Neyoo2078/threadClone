@@ -39,15 +39,17 @@ import GifBox from './GifBox';
 
 interface props {
   userDatas: any;
+  communityIds: any;
+  setReload: any;
 }
 
 interface params {
   message: any;
   accountid: any;
   path: any;
-  communityId: any;
+  communityIds: any;
 }
-const CreateThreadHome = ({ userDatas }: props) => {
+const CreateThreadHome = ({ userDatas, communityIds, setReload }: props) => {
   const pathname = usePathname();
   const router = useRouter();
   const [openImageMessage, setopenImageMessage] = useState(false);
@@ -86,9 +88,10 @@ const CreateThreadHome = ({ userDatas }: props) => {
       author: values?.accountid,
       // pictureMessage: pictureUrl,
       path: pathname,
-      communityId: null,
+      communityId: communityIds ? communityIds : null,
     });
     form.reset();
+    setReload(true);
   };
   useEffect(() => {
     if (openImageMessage) {

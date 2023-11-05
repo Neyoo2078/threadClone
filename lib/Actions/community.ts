@@ -6,35 +6,39 @@ import Community from '../Model/Community';
 import Threads from '../Model/Thread';
 import Users from '../Model/User';
 import { connectionDb } from '../DataBase';
+import { revalidatePath } from 'next/cache';
 
-export async function createCommunity(
-  id: string,
-  name: string,
-  username: any,
-  image: string,
-  bio: string,
-  createdById: string // Change the parameter name to reflect it's an id
-) {
+export async function createCommunity({
+  id,
+  username,
+  name,
+  bio,
+  image,
+  createdBy,
+}: any) {
   try {
     connectionDb();
     // Find the user with the provided unique id
-    const user = await Users.findOne({ userid: createdById });
+    const user = await Users.findById(createdBy);
 
     if (!user) {
       throw new Error('User not found'); // Handle the case if the user with the id is not found
     }
+    console.log({ username });
 
     const newCommunity = new Community({
       id,
-      name,
       username,
+      name,
       image,
       bio,
-      createdBy: user._id, // Use the mongoose ID of the user
+      createdBy, // Use the mongoose ID of the user
     });
 
     const createdCommunity = await newCommunity.save();
-
+    await Community.findByIdAndUpdate(createdCommunity._id, {
+      $push: { members: user._id },
+    });
     // Update User model
     user.communities.push(createdCommunity._id);
     await user.save();
@@ -51,19 +55,55 @@ export async function fetchCommunityDetails(id: string) {
   try {
     connectionDb();
 
-    const communityDetails = await Community.findOne({ id }).populate([
-      'createdBy',
-      {
-        path: 'members',
-        model: Users,
-        select: 'name username image _id id',
-      },
-    ]);
+    const communityDetails = await Community.findById(id)
+      .populate({
+        path: 'createdBy',
+        model: 'User',
+      })
+      .populate({
+        path: 'threads',
+        model: 'Threads',
+        populate: {
+          path: 'author',
+          model: 'User',
+        },
+      });
+    // .populate([
+    //   'createdBy',
+    //   {
+    //     path: 'members',
+    //     model: Users,
+    //     select: 'name username image _id id',
+    //   },
+    //   {
+    //     path: 'threads',
+    //     model: Threads,
+    //     populate: {
+    //       path: 'author',
+    //       model: 'User',
+    //     },
+    //   },
+    // ]);
 
-    return communityDetails;
+    return JSON.stringify(communityDetails);
   } catch (error) {
     // Handle any errors
     console.error('Error fetching community details:', error);
+    throw error;
+  }
+}
+
+export async function fetchAllCommunity() {
+  try {
+    connectionDb();
+
+    const communityPosts = await Community.find({}).populate({
+      path: 'members',
+      model: 'User',
+    });
+    return JSON.stringify(communityPosts);
+  } catch (error) {
+    console.error('Error fetching community posts:', error);
     throw error;
   }
 }
@@ -72,28 +112,35 @@ export async function fetchCommunityPosts(id: string) {
   try {
     connectionDb();
 
-    const communityPosts = await Community.findById(id).populate({
-      path: 'threads',
-      model: Threads,
-      populate: [
-        {
-          path: 'author',
-          model: Users,
-          select: 'name image id', // Select the "name" and "_id" fields from the "User" model
-        },
-        {
-          path: 'children',
-          model: Threads,
-          populate: {
+    const communityPosts = await Community.findById(id)
+      .populate({
+        path: 'threads',
+        model: Threads,
+        populate: [
+          {
             path: 'author',
-            model: Users,
-            select: 'image _id', // Select the "name" and "_id" fields from the "User" model
+            model: 'User',
+            select: 'name image id', // Select the "name" and "_id" fields from the "User" model
           },
-        },
-      ],
-    });
+          {
+            path: 'children',
+            model: Threads,
+            populate: {
+              path: 'author',
+              model: 'User',
+              select: 'image _id', // Select the "name" and "_id" fields from the "User" model
+            },
+          },
+          {
+            path: 'community',
+            model: Community,
+          },
+        ],
+      })
+      .populate({ path: 'members', model: 'User' })
+      .populate({ path: 'createdBy', model: 'User' });
 
-    return communityPosts;
+    return JSON.stringify(communityPosts);
   } catch (error) {
     // Handle any errors
     console.error('Error fetching community posts:', error);
@@ -165,33 +212,46 @@ export async function addMemberToCommunity(
     connectionDb();
 
     // Find the community by its unique id
-    const community = await Community.findOne({ id: communityId });
+    const community = await Community.findById(communityId);
 
     if (!community) {
       throw new Error('Community not found');
     }
-
     // Find the user by their unique id
-    const user = await Users.findOne({ id: memberId });
+    const user = await Users.findById(memberId);
 
     if (!user) {
       throw new Error('User not found');
     }
 
     // Check if the user is already a member of the community
-    if (community.members.includes(user._id)) {
-      throw new Error('User is already a member of the community');
+    const exist = community.members.includes(user._id);
+    if (exist) {
+      const RemoveMemberInCommunity = community.members.filter(
+        (items: any) => items._id.toString() !== user._id.toString()
+      );
+      const RemoveCommunityInUser = user.communities.filter(
+        (items: any) => items._id.toString() !== community._id.toString()
+      );
+      console.log({ RemoveCommunityInUser });
+      await Community.findByIdAndUpdate(communityId, {
+        members: RemoveMemberInCommunity,
+      });
+      await Users.findByIdAndUpdate(memberId, {
+        communities: RemoveCommunityInUser,
+      });
+    } else {
+      // Add the user's _id to the members array in the community
+      community.members.push(user._id);
+      await community.save();
+
+      // Add the community's _id to the communities array in the user
+      user.communities.push(community._id);
+      await user.save();
     }
 
-    // Add the user's _id to the members array in the community
-    community.members.push(user._id);
-    await community.save();
-
-    // Add the community's _id to the communities array in the user
-    user.communities.push(community._id);
-    await user.save();
-
-    return community;
+    revalidatePath('/communities');
+    return JSON.stringify(community);
   } catch (error) {
     // Handle any errors
     console.error('Error adding member to community:', error);

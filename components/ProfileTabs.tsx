@@ -32,7 +32,7 @@ const ProfileTabs = ({ threads, user }: props) => {
                 setActiveTab(tabs.value);
               }}
               className={`hover:bg-primary-500 ${
-                activeTab === tabs.value && 'border-primary-500 border'
+                activeTab === tabs.value && 'bg-primary-500 border'
               } text-white p-3`}
             >
               {tabs.label}

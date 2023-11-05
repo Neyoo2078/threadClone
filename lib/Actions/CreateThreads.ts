@@ -7,6 +7,7 @@ import Users from '../Model/User';
 import { trendingWordByHashtag } from '../utils';
 import { wordorPhrase, hashtag } from '../utils';
 import { getTrendingTopics } from '../TrendingWords';
+import Community from '../Model/Community';
 
 interface props {
   message: string;
@@ -23,7 +24,16 @@ export const postThread = async ({
   try {
     await connectionDb();
 
-    const thread = await Threads.create({ message, author });
+    const thread = await Threads.create({
+      message,
+      author,
+      community: communityId ? communityId : '',
+    });
+    if (communityId) {
+      await Community.findByIdAndUpdate(communityId, {
+        $push: { threads: thread._id },
+      });
+    }
 
     await Users.findOneAndUpdate(
       { _id: author },
@@ -56,7 +66,8 @@ export const fetchTreads = async (pageSize = 6, pageNumber = 1) => {
           model: 'User',
           select: ' _id name parentId image',
         },
-      });
+      })
+      .populate({ path: 'community', model: 'Community' });
 
     const documentCount = await Threads.find({
       parentId: null || undefined,

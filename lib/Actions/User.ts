@@ -5,6 +5,7 @@ import Users from '../Model/User';
 import Threads from '../Model/Thread';
 import { revalidatePath } from 'next/cache';
 import mongoose from 'mongoose';
+import Community from '../Model/Community';
 
 const { ObjectId } = mongoose.Types;
 
@@ -77,26 +78,32 @@ export async function updateUserData({
 
 export const fetchUser = async ({ userid }: { userid: any }) => {
   await connectionDb();
-  const user = await Users.findOne({ userid }).populate({
-    path: 'threads',
-    model: 'Threads',
-    populate: [
-      {
-        path: 'author',
-        model: 'User',
-        select: ' _id name parentId image',
-      },
-      {
-        path: 'children',
-        populate: {
+  const user = await Users.findOne({ userid })
+    .populate({
+      path: 'threads',
+      model: 'Threads',
+      populate: [
+        {
           path: 'author',
           model: 'User',
           select: ' _id name parentId image',
         },
-        model: 'Threads',
-      },
-    ],
-  });
+        {
+          path: 'children',
+          populate: {
+            path: 'author',
+            model: 'User',
+            select: ' _id name parentId image',
+          },
+          model: 'Threads',
+        },
+      ],
+    })
+    .populate({
+      path: 'communities',
+      model: Community,
+      populate: { path: 'threads', model: 'Threads' },
+    });
 
   return JSON.stringify(user);
 };
@@ -199,27 +206,13 @@ export const getValueUsers = async (value: string) => {
 export const AddFriend = async ({ activeuser, seconduser, path }: any) => {
   try {
     connectionDb();
-    // const res = await Users.findByIdAndUpdate(
-    //   seconduser,
-    //   {
-    //     $push: { followers: activeuser },
-    //   },
-    //   { new: true }
-    // );
+    console.log({ activeuser, seconduser, path });
     const res = await Users.findById(seconduser);
     const activerres = await Users.findById(activeuser);
-    console.log(res.followers);
-    console.log('follower added');
 
     const exist = res.followers.includes(activeuser);
-    console.log(exist);
-    console.log({ _id: res._id });
-    console.log(res.followers);
-    if (!exist) {
-      // const secondfollow = res.followers.push(activerres._id);
-      // const activefollow = activerres.following.push(res._id);
-      // console.log({ secondfollow });
 
+    if (!exist) {
       await Users.findByIdAndUpdate(seconduser, {
         $push: { followers: activerres._id },
       });

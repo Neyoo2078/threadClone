@@ -13,7 +13,7 @@ const page = async () => {
   const res = await fetchAllUsers();
   const trendingWords = await fetchTrendingWords();
   const trends: TrendingWord[] = JSON.parse(trendingWords);
-  console.log({ trendingWords });
+
   return (
     <div className="flex gap-3 flex-col">
       <Search />

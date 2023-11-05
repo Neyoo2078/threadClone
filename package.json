@@ -11,9 +11,12 @@
   "dependencies": {
     "@clerk/nextjs": "^4.23.2",
     "@clerk/themes": "^1.7.5",
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
     "@giphy/js-fetch-api": "^5.2.0",
     "@giphy/react-components": "^9.0.1",
     "@hookform/resolvers": "^3.2.0",
+    "@mui/material": "^5.14.16",
     "@radix-ui/react-label": "^2.0.2",
     "@radix-ui/react-slot": "^1.0.2",
     "@radix-ui/react-tabs": "^1.0.4",
