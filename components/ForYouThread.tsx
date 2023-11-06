@@ -51,13 +51,13 @@ const forYouThread = ({ threads, user }: any) => {
             </TabsTrigger>
           ))}
         </TabsList>
-        <hr className="my-[10px]" />
+        <hr className="my-[10px] hidden md:block" />
         <CreateThreadHome
           userDatas={user}
           communityIds={ActiveTab.id}
           setReload={setReload}
         />
-        <hr className="my-[10px]" />
+        <hr className="my-[10px] hidden md:block" />
         <TabsContent value="For You">
           {threads?.post.length === 0 ? (
             <h1>no Thread avaialable</h1>

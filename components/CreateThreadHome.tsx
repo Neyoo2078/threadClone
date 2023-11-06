@@ -22,6 +22,7 @@ import EmojiPickers2 from './EmojiPicker2';
 import { isBase64Image } from '@/lib/utils';
 import { useUploadThing } from '@/lib/uploadthing';
 import { useOrganization } from '@clerk/nextjs';
+import { BsPencil } from 'react-icons/bs';
 
 import {
   Form,
@@ -129,13 +130,16 @@ const CreateThreadHome = ({ userDatas, communityIds, setReload }: props) => {
   };
 
   return (
-    <div className="flex flex-col gap-1  ">
+    <div className="flex relative flex-col gap-1  ">
       {closeModal && (
         <div className="fixed inset-0 z-40 bg-white/10 flex w-full h-full  ">
           <GifBox closeModal={modalClose} setimageMessage={setimageMessage} />
         </div>
       )}
-      <div className="flex gap-1 relative items-start justify-between">
+      <div className="fixed z-50 bg-primary-500 p-3  rounded-full bottom-[90px] right-[40px] ">
+        <BsPencil className="" />
+      </div>
+      <div className=" gap-1 relative md:block hidden items-start justify-between">
         <Image
           src={userDatas?.image}
           alt="profile_photo"
@@ -146,7 +150,7 @@ const CreateThreadHome = ({ userDatas, communityIds, setReload }: props) => {
         <div
           className={`flex flex-col ${
             imageMessage && 'h-[260px] md:h-[330px]'
-          } justify-between gap-1 w-[80%]`}
+          } justify-between  gap-1 w-[80%]`}
         >
           <Form {...form}>
             <form className="flex w-full gap-10 flex-col  pb-3 justify-start">
