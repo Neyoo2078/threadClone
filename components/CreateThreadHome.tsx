@@ -143,7 +143,11 @@ const CreateThreadHome = ({ userDatas, communityIds, setReload }: props) => {
           height={96}
           className="rounded-full object-contain w-[50px] h-[50px] md:w-[96px] md:h-[96px]"
         />
-        <div className="flex flex-col h-[230px] md:h-[330px] justify-between gap-1 w-[80%]">
+        <div
+          className={`flex flex-col ${
+            imageMessage && 'h-[260px] md:h-[330px]'
+          } justify-between gap-1 w-[80%]`}
+        >
           <Form {...form}>
             <form className="flex w-full gap-10 flex-col  pb-3 justify-start">
               <FormField
@@ -179,12 +183,12 @@ const CreateThreadHome = ({ userDatas, communityIds, setReload }: props) => {
                 <img
                   src={imageMessage}
                   alt="img-message"
-                  className="my-3 w-[200px] h-[100px] lg:w-[400px] lg:h-[200px]"
+                  className="my-3 w-[200px] h-[130px] lg:w-[400px] lg:h-[200px]"
                 />
               </div>
             </div>
           )}
-          <div className="flex  w-full my-[5px] border-t-[1px] py-2  justify-between items-center">
+          <div className="flex  w-full my-[2px] border-t-[1px] py-2  justify-between items-center">
             <div className="flex gap-2 items-center">
               <div className="rounded-full p-2 hover:bg-primary-500 ">
                 <BsImageFill
