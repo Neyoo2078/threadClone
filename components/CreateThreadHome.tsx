@@ -135,15 +135,15 @@ const CreateThreadHome = ({ userDatas, communityIds, setReload }: props) => {
           <GifBox closeModal={modalClose} setimageMessage={setimageMessage} />
         </div>
       )}
-      <div className="flex gap-1  items-start justify-between">
+      <div className="flex gap-1 relative items-start justify-between">
         <Image
           src={userDatas?.image}
           alt="profile_photo"
           width={96}
           height={96}
-          className="rounded-full object-contain"
+          className="rounded-full object-contain w-[50px] h-[50px] md:w-[96px] md:h-[96px]"
         />
-        <div className="flex flex-col w-[80%]">
+        <div className="flex flex-col h-[230px] md:h-[330px] justify-between gap-1 w-[80%]">
           <Form {...form}>
             <form className="flex w-full gap-10 flex-col  pb-3 justify-start">
               <FormField
@@ -154,7 +154,7 @@ const CreateThreadHome = ({ userDatas, communityIds, setReload }: props) => {
                     <FormControl className="flex-1 my-[10px] text-base-semibold text-gray-200">
                       <Input
                         placeholder="What is happening?!"
-                        className="account-form_input no-focus outline-none"
+                        className="account-form_input no-focus outline-none w-full"
                         {...field}
                       />
                     </FormControl>
@@ -163,8 +163,10 @@ const CreateThreadHome = ({ userDatas, communityIds, setReload }: props) => {
                 )}
               />
             </form>
-            {imageMessage && (
-              <div className="relative w-[400px]  h-[200]">
+          </Form>
+          {imageMessage && (
+            <div className="absolute top-[60px]">
+              <div className="relative w-[200px] h-[100px] lg:w-[400px]  lg:h-[200]">
                 <div className="w-[30px] flex justify-center items-center h-[30px] cursor-pointer  absolute top-3 right-2 bg-black rounded-full">
                   <AiOutlineClose
                     onClick={(e) => {
@@ -177,11 +179,11 @@ const CreateThreadHome = ({ userDatas, communityIds, setReload }: props) => {
                 <img
                   src={imageMessage}
                   alt="img-message"
-                  className="my-3 w-[400px] h-[200px]"
+                  className="my-3 w-[200px] h-[100px] lg:w-[400px] lg:h-[200px]"
                 />
               </div>
-            )}
-          </Form>
+            </div>
+          )}
           <div className="flex  w-full my-[5px] border-t-[1px] py-2  justify-between items-center">
             <div className="flex gap-2 items-center">
               <div className="rounded-full p-2 hover:bg-primary-500 ">
