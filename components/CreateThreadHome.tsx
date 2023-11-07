@@ -23,6 +23,7 @@ import { isBase64Image } from '@/lib/utils';
 import { useUploadThing } from '@/lib/uploadthing';
 import { useOrganization } from '@clerk/nextjs';
 import { BsPencil } from 'react-icons/bs';
+import MobileCreateThread from './MobileCreateThread';
 
 import {
   Form,
@@ -42,6 +43,7 @@ interface props {
   userDatas: any;
   communityIds: any;
   setReload: any;
+  TabThread: any;
 }
 
 interface params {
@@ -49,8 +51,14 @@ interface params {
   accountid: any;
   path: any;
   communityIds: any;
+  TabThread: any;
 }
-const CreateThreadHome = ({ userDatas, communityIds, setReload }: props) => {
+const CreateThreadHome = ({
+  userDatas,
+  communityIds,
+  setReload,
+  TabThread,
+}: props) => {
   const pathname = usePathname();
   const router = useRouter();
   const [openImageMessage, setopenImageMessage] = useState(false);
@@ -59,6 +67,7 @@ const CreateThreadHome = ({ userDatas, communityIds, setReload }: props) => {
   const [openEmoji, setopenEmoji] = useState(false);
   const [closeModal, setcloseModal] = useState(false);
   const [inputValue, setinputValue] = useState('');
+  const [openMobileModal, setopenMobileModal] = useState(false);
 
   const userOrganization = useOrganization();
   console.log({ userOrganization });
@@ -136,9 +145,21 @@ const CreateThreadHome = ({ userDatas, communityIds, setReload }: props) => {
           <GifBox closeModal={modalClose} setimageMessage={setimageMessage} />
         </div>
       )}
-      <div className="fixed z-50 bg-primary-500 p-3  rounded-full bottom-[90px] right-[40px] ">
+      <div
+        onClick={() => {
+          setopenMobileModal(true);
+        }}
+        className="fixed z-40 md:hidden bg-primary-500 p-3  rounded-full bottom-[90px] right-[40px] "
+      >
         <BsPencil className="" />
       </div>
+      {openMobileModal && (
+        <MobileCreateThread
+          userDatas={userDatas}
+          setopenMobileModal={setopenMobileModal}
+          openMobileModal={openMobileModal}
+        />
+      )}
       <div className=" gap-1 relative md:block hidden items-start justify-between">
         <Image
           src={userDatas?.image}

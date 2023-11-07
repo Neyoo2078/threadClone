@@ -211,3 +211,22 @@
   border-left: none;
   z-index: 1;
 }
+
+.custom-select select:focus {
+  outline: none;
+}
+
+.custom-select select::-ms-expand {
+  display: none; /* Remove arrow icon on Microsoft browsers */
+}
+
+#mySelect {
+  background-color: transparent;
+  border: 1px blue solid;
+  border-radius: 50px;
+  font-size: 15px;
+  padding: 5px;
+  width: 100px;
+  position: absolute;
+  margin-bottom: 20px;
+}

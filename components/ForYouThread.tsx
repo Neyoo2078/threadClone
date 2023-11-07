@@ -56,6 +56,7 @@ const forYouThread = ({ threads, user }: any) => {
           userDatas={user}
           communityIds={ActiveTab.id}
           setReload={setReload}
+          TabThread={TabThread}
         />
         <hr className="my-[10px] hidden md:block" />
         <TabsContent value="For You">
